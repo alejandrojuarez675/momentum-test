@@ -14,7 +14,7 @@ export class AIService {
         return await this.clientAI.generateSalesCallTranscript()
     }
 
-    public summarizeData(data: String): String {
-        return this.clientAI.summarizedData(data)
+    public async summarizeData(data: String): Promise<String> {
+        return await this.clientAI.summarizedData(data)
     }
 }

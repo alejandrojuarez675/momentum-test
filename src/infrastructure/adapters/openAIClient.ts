@@ -3,17 +3,38 @@ import OpenAI from "openai";
 
 export class OpenAIClient implements IClientAI {
 
+  MODEL = "gpt-3.5-turbo"
+
   constructor(private openAi = new OpenAI()) {}
 
   askAQuestionBasedOnData(data: String, question: String): String {
     return data
   }
 
-  summarizedData(data: String): String {
-    return data
+  async summarizedData(data: String): Promise<String> {
+    console.log("summarizing data...")
+    
+    const summarizedData = await this.openAi.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: `You are a assistant that can summarized call transcriptions.
+          I need to summarize the next text:`,
+        },
+        {
+          role: "user",
+          content: `I need to summarize the next text: "${data}"`,
+        }
+      ],
+      model: this.MODEL,
+    });
+    
+    return summarizedData.choices[0].message.content || "";
   }
 
   async generateSalesCallTranscript(): Promise<String> {
+    console.log("generating sales call transcription...")
+
     const completion = await this.openAi.chat.completions.create({
       messages: [
         {
@@ -24,7 +45,7 @@ export class OpenAIClient implements IClientAI {
           {hour} {user} ({company website "mycompany.com"}): {msg}`,
         },
       ],
-      model: "gpt-3.5-turbo",
+      model: this.MODEL,
     });
     
     return completion.choices[0].message.content || "";

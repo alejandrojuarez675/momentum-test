@@ -6,7 +6,7 @@ export class SummarizeDataUseCase {
         private aiService: AIService
     ) {}
     
-    public summarizeData(data: String): String {
-        return this.aiService.summarizeData(data)
+    public async summarizeData(data: String): Promise<String> {
+        return await this.aiService.summarizeData(data)
     }
 }

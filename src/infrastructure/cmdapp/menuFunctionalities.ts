@@ -57,7 +57,7 @@ export class MenuFunctionalities {
                 name: `${response}.txt`
             })
 
-            const summarizedData = this.summarizeCallTranscriptUsecase.summarizeData(data)
+            const summarizedData = await this.summarizeCallTranscriptUsecase.summarizeData(data)
 
             console.log("The summary of the call is: ")
             console.log(summarizedData)

@@ -48,7 +48,6 @@ export class CmdApp {
                     break
                 default:
                     console.log("Have a error in your option, please write again")
-                    this.showMenu()
                     break
             }    
         } catch (error) {
