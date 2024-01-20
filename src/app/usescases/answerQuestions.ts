@@ -5,7 +5,7 @@ export class AnswerQuestionsUseCase {
         private aiService: AIService
     ) {}
     
-    public askAQuestionInThatData(data: String, question: String): String {
-        return this.aiService.askAQuestionBasedOnData(data, question)
+    public async askAQuestionInThatData(data: String, question: String): Promise<String> {
+        return await this.aiService.askAQuestionBasedOnData(data, question)
     }
 }

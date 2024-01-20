@@ -71,8 +71,8 @@ export class MenuFunctionalities {
                 name: `${response}.txt`
             })
 
-            this.rl.question("ask the questions: ",  (question: string) => {
-                const answer = this.answerQuestionUseCase.askAQuestionInThatData(data, question)
+            this.rl.question("ask the questions: ",  async (question: string) => {
+                const answer = await this.answerQuestionUseCase.askAQuestionInThatData(data, question)
 
                 console.log("The answer is: ")
                 console.log(answer)

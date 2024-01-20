@@ -6,8 +6,8 @@ export class AIService {
         private clientAI: IClientAI
     ) {}
 
-    askAQuestionBasedOnData(data: String, question: String): String {
-        return this.clientAI.askAQuestionBasedOnData(data, question)
+    async askAQuestionBasedOnData(data: String, question: String): Promise<String> {
+        return await this.clientAI.askAQuestionBasedOnData(data, question)
     }
 
     public async generateSalesCallTranscript(): Promise<String> {

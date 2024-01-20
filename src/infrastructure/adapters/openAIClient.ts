@@ -7,9 +7,25 @@ export class OpenAIClient implements IClientAI {
 
   constructor(private openAi = new OpenAI()) {}
 
-  askAQuestionBasedOnData(data: String, question: String): String {
-    return data
-  }
+  async askAQuestionBasedOnData(data: String, question: String): Promise<String> {
+    console.log("searching a response on data...")
+    
+    const summarizedData = await this.openAi.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: `You are a assistant that can ask question based on information on a call transcriptions.
+          `,
+        },
+        {
+          role: "user",
+          content: `I need to respond the question "${question}" based on the information on the next text: "${data}"`,
+        }
+      ],
+      model: this.MODEL,
+    });
+    
+    return summarizedData.choices[0].message.content || "";  }
 
   async summarizedData(data: String): Promise<String> {
     console.log("summarizing data...")
@@ -18,8 +34,7 @@ export class OpenAIClient implements IClientAI {
       messages: [
         {
           role: "system",
-          content: `You are a assistant that can summarized call transcriptions.
-          I need to summarize the next text:`,
+          content: `You are a assistant that can summarized call transcriptions.`,
         },
         {
           role: "user",
