@@ -6,7 +6,7 @@ export class GenerateDataWithAIUseCase {
         private aiService: AIService
     ) {}
     
-    public async generateSalesCallTranscript(): Promise<String> {
-        return await this.aiService.generateSalesCallTranscript()
+    public async generateSalesCallTranscript(language: String): Promise<String> {
+        return await this.aiService.generateSalesCallTranscript(language)
     }
 }

@@ -8,13 +8,13 @@ export class SummarizeCallTranscriptsHandler {
         private readFileUseCase: ReadFileUseCase,
     ) {}
 
-    public async handle(dir: String, nameFile: String): Promise<String> {
+    public async handle(dir: String, nameFile: String, language: String): Promise<String> {
         const data = await this.readFileUseCase.getContentFrom({
             dir,
             name: `${nameFile}.txt`
         })
 
-        return await this.summarizeCallTranscriptUsecase.summarizeData(data)
+        return await this.summarizeCallTranscriptUsecase.summarizeData(data, language)
     }
 
 }

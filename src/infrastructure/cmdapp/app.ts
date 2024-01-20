@@ -31,11 +31,10 @@ export class CmdApp {
         generateCallTranscriptsUseCase = new GenerateDataWithAIUseCase(aiService),
         summarizeCallTranscriptUsecase = new SummarizeDataUseCase(aiService),
         answerQuestionUseCase = new AnswerQuestionsUseCase(aiService),
-        translateDataUseCase = new TranslateDataUseCase(aiService),
         saveFileUseCase = new SaveFileUseCase(fileService),
         listFileUseCase = new ListFilesUseCase(fileService),
         readFileUseCase = new ReadFileUseCase(fileService),
-        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(generateCallTranscriptsUseCase, saveFileUseCase, translateDataUseCase),
+        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(generateCallTranscriptsUseCase, saveFileUseCase),
         private listFilesHandler = new ListFilesHandler(listFileUseCase),
         private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(summarizeCallTranscriptUsecase, readFileUseCase),
         private answerQuestionHandler = new AnswerQuestionsHandler(answerQuestionUseCase, readFileUseCase),
@@ -107,22 +106,26 @@ export class CmdApp {
 
     public async summarizedCallTranscript() {
         this.rl.question("What file do you want to summarized? ",  async (response: string) => {
-            const summarizedData = await this.summarizeCallTranscriptHandler.handle(this.FILES_FOLDER, response)
-            console.log("\nThe summary of the call is: ")
-            console.log(summarizedData)
+            this.rl.question("What language do you prefer for the call? ",  async (language: string) => {
+                const summarizedData = await this.summarizeCallTranscriptHandler.handle(this.FILES_FOLDER, response, language)
+                console.log("\nThe summary of the call is: ")
+                console.log(summarizedData)
 
-            this.showMenu()
+                this.showMenu()
+            });
         });
     }
 
     public async askQuestions() {
         this.rl.question("What file do you want to analyze to ask questions? ",  async (response: string) => {
             this.rl.question("ask the questions: ",  async (question: string) => {
-                const answer = await this.answerQuestionHandler.handle(this.FILES_FOLDER, response, question)
-                console.log("\nThe answer is: ")
-                console.log(answer)
+                this.rl.question("What language do you prefer for the call? ",  async (language: string) => {
+                    const answer = await this.answerQuestionHandler.handle(this.FILES_FOLDER, response, question, language)
+                    console.log("\nThe answer is: ")
+                    console.log(answer)
 
-                this.showMenu()
+                    this.showMenu()
+                });
             });
         });
     }

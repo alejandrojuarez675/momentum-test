@@ -8,12 +8,12 @@ export class AnswerQuestionsHandler {
         private readFileUseCase: ReadFileUseCase,
     ){}
 
-    public async handle(dir: String, nameFile: String, question: String): Promise<String> {
+    public async handle(dir: String, nameFile: String, question: String, language: String): Promise<String> {
         const data = await this.readFileUseCase.getContentFrom({
             dir,
             name: `${nameFile}.txt`
         })
 
-        return await this.answerQuestionUseCase.askAQuestionInThatData(data, question)
+        return await this.answerQuestionUseCase.askAQuestionInThatData(data, question, language)
     }
 }

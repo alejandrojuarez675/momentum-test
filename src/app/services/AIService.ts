@@ -6,16 +6,16 @@ export class AIService {
         private clientAI: IClientAI
     ) {}
 
-    async askAQuestionBasedOnData(data: String, question: String): Promise<String> {
-        return await this.clientAI.askAQuestionBasedOnData(data, question)
+    async askAQuestionBasedOnData(data: String, question: String, language: String): Promise<String> {
+        return await this.clientAI.askAQuestionBasedOnData(data, question, language)
     }
 
-    public async generateSalesCallTranscript(): Promise<String> {
-        return await this.clientAI.generateSalesCallTranscript()
+    public async generateSalesCallTranscript(language: String): Promise<String> {
+        return await this.clientAI.generateSalesCallTranscript(language)
     }
 
-    public async summarizeData(data: String): Promise<String> {
-        return await this.clientAI.summarizedData(data)
+    public async summarizeData(data: String, language: String): Promise<String> {
+        return await this.clientAI.summarizedData(data, language)
     }
 
     public async translate(data: String, from: String, to: String): Promise<String> {
