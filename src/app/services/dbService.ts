@@ -1,10 +1,10 @@
 import { QuestionAndAnswer } from "../../domain/questionAnswerDomain";
-import { DbClient } from "../ports/dbClient";
+import { IDbClient } from "../ports/IDbClient";
 
 export class DbService {
 
     constructor(
-        private dbClient: DbClient,
+        private dbClient: IDbClient,
     ) {}
 
     async showHistoryForFileName(fileName: String): Promise<QuestionAndAnswer[]> {

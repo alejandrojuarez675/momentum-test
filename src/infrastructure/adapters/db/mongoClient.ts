@@ -1,9 +1,9 @@
-import { DbClient } from "../../../app/ports/dbClient";
+import { IDbClient } from "../../../app/ports/IDbClient";
 import { QuestionAndAnswer } from "../../../domain/questionAnswerDomain";
 const mongoose = require('mongoose');
 const QuestionAndAnswerSchema = require("./entities/questionAndAnswerSchema")
 
-export class MongoDbClient implements DbClient {
+export class MongoDbClient implements IDbClient {
 
 
     constructor(){

@@ -51,7 +51,6 @@ export class CmdApp {
         console.log("5 - Ask a question")
         console.log("6 - show history of Q&A")
 
-        // TODO replace for $ npm install prompt-sync
         this.rl.question("What is your option? ",  (response: string) => {
             this.processResponse(response)
         });
