@@ -1,13 +1,13 @@
-import { ReadFileUseCase } from "../usescases/readFileUseCase";
+import { FileService } from "../services/fileService";
 
 export class ReadFileHandler {
 
     constructor(
-        private readFileUseCase: ReadFileUseCase
+        private fileService: FileService,
     ) {}
 
     public async handle(dir: String, nameFile: String): Promise<String> {
-        return await this.readFileUseCase.getContentFrom({
+        return await this.fileService.getContentFromFile({
             dir,
             name: `${nameFile}.txt`
         })

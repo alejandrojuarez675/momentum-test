@@ -5,12 +5,6 @@ import { ReadFileHandler } from "../../app/handlers/readFileHandler";
 import { SummarizeCallTranscriptsHandler } from "../../app/handlers/summarizeCallTranscriptHandler";
 import { AIService } from "../../app/services/AIService";
 import { FileService } from "../../app/services/fileService";
-import { AnswerQuestionsUseCase } from "../../app/usescases/answerQuestionsUseCase";
-import { GenerateDataWithAIUseCase } from "../../app/usescases/generateDataWithAIUseCase";
-import { ListFilesUseCase } from "../../app/usescases/listFilesUseCase";
-import { ReadFileUseCase } from "../../app/usescases/readFileUseCase";
-import { SaveFileUseCase } from "../../app/usescases/saveFileUseCase";
-import { SummarizeDataUseCase } from "../../app/usescases/summarizeDataUseCase";
 import { OpenAIClient } from "../adapters/openAIClient";
 const readline = require("readline");
 
@@ -27,17 +21,11 @@ export class CmdApp {
         openAiClient = new OpenAIClient(),
         fileService = new FileService(),
         aiService = new AIService(openAiClient),
-        generateCallTranscriptsUseCase = new GenerateDataWithAIUseCase(aiService),
-        summarizeCallTranscriptUsecase = new SummarizeDataUseCase(aiService),
-        answerQuestionUseCase = new AnswerQuestionsUseCase(aiService),
-        saveFileUseCase = new SaveFileUseCase(fileService),
-        listFileUseCase = new ListFilesUseCase(fileService),
-        readFileUseCase = new ReadFileUseCase(fileService),
-        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(generateCallTranscriptsUseCase, saveFileUseCase),
-        private listFilesHandler = new ListFilesHandler(listFileUseCase),
-        private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(summarizeCallTranscriptUsecase, readFileUseCase),
-        private answerQuestionHandler = new AnswerQuestionsHandler(answerQuestionUseCase, readFileUseCase),
-        private readFileHandler = new ReadFileHandler(readFileUseCase),
+        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(aiService, fileService),
+        private listFilesHandler = new ListFilesHandler(fileService),
+        private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(aiService, fileService),
+        private answerQuestionHandler = new AnswerQuestionsHandler(aiService, fileService),
+        private readFileHandler = new ReadFileHandler(fileService),
     ) {}
 
     public start(): void {

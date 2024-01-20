@@ -1,17 +1,17 @@
-import { GenerateDataWithAIUseCase } from "../usescases/generateDataWithAIUseCase";
-import { SaveFileUseCase } from "../usescases/saveFileUseCase";
+import { AIService } from "../services/AIService";
+import { FileService } from "../services/fileService";
 
 export class GenerateCallTranscriptsHandler {
 
     constructor(
-        private generateCallTranscriptsUseCase: GenerateDataWithAIUseCase,
-        private saveFileUseCase: SaveFileUseCase,
+        private aiService: AIService,
+        private fileService: FileService,
     ){}
 
     public async handle(dir: String, nameFile: String, language: String): Promise<String> {
-        const generatedCall = await this.generateCallTranscriptsUseCase.generateSalesCallTranscript(language);
+        const generatedCall = await this.aiService.generateSalesCallTranscript(language);
 
-        await this.saveFileUseCase.save({
+        await this.fileService.saveFile({
             dir: dir,
             name: `${nameFile}.txt`,
             data: generatedCall

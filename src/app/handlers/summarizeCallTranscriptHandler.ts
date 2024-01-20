@@ -1,20 +1,20 @@
-import { ReadFileUseCase } from "../usescases/readFileUseCase"
-import { SummarizeDataUseCase } from "../usescases/summarizeDataUseCase"
+import { AIService } from "../services/AIService"
+import { FileService } from "../services/fileService"
 
 export class SummarizeCallTranscriptsHandler {
 
     constructor(
-        private summarizeCallTranscriptUsecase: SummarizeDataUseCase,
-        private readFileUseCase: ReadFileUseCase,
+        private aiService: AIService,
+        private fileService: FileService,
     ) {}
 
     public async handle(dir: String, nameFile: String, language: String): Promise<String> {
-        const data = await this.readFileUseCase.getContentFrom({
+        const data = await this.fileService.getContentFromFile({
             dir,
             name: `${nameFile}.txt`
         })
 
-        return await this.summarizeCallTranscriptUsecase.summarizeData(data, language)
+        return await this.aiService.summarizeData(data, language)
     }
 
 }

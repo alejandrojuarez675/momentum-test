@@ -1,19 +1,19 @@
-import { AnswerQuestionsUseCase } from "../usescases/answerQuestionsUseCase"
-import { ReadFileUseCase } from "../usescases/readFileUseCase"
+import { AIService } from "../services/AIService"
+import { FileService } from "../services/fileService"
 
 export class AnswerQuestionsHandler {
 
     constructor(
-        private answerQuestionUseCase: AnswerQuestionsUseCase,
-        private readFileUseCase: ReadFileUseCase,
+        private aiService: AIService,
+        private fileService: FileService,
     ){}
 
     public async handle(dir: String, nameFile: String, question: String, language: String): Promise<String> {
-        const data = await this.readFileUseCase.getContentFrom({
+        const data = await this.fileService.getContentFromFile({
             dir,
             name: `${nameFile}.txt`
         })
 
-        return await this.answerQuestionUseCase.askAQuestionInThatData(data, question, language)
+        return await this.aiService.askAQuestionBasedOnData(data, question, language)
     }
 }

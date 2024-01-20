@@ -1,12 +1,12 @@
-import { ListFilesUseCase } from "../usescases/listFilesUseCase";
+import { FileService } from "../services/fileService";
 
 export class ListFilesHandler {
 
     constructor(
-        private listFileUseCase: ListFilesUseCase,
+        private fileService: FileService,    
     ){}
 
     public async handle(dir: String) {
-        return await this.listFileUseCase.listFilesFrom(dir)
+        return await this.fileService.listFilesFromThatFolder(dir)
     }
 }
