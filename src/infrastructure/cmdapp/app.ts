@@ -10,6 +10,7 @@ import { ListFilesUseCase } from "../../app/usescases/listFilesUseCase";
 import { ReadFileUseCase } from "../../app/usescases/readFileUseCase";
 import { SaveFileUseCase } from "../../app/usescases/saveFileUseCase";
 import { SummarizeDataUseCase } from "../../app/usescases/summarizeDataUseCase";
+import { TranslateDataUseCase } from "../../app/usescases/translateDataUseCase";
 import { OpenAIClient } from "../adapters/openAIClient";
 import { MENU } from "./menu";
 const readline = require("readline");
@@ -30,10 +31,11 @@ export class CmdApp {
         generateCallTranscriptsUseCase = new GenerateDataWithAIUseCase(aiService),
         summarizeCallTranscriptUsecase = new SummarizeDataUseCase(aiService),
         answerQuestionUseCase = new AnswerQuestionsUseCase(aiService),
+        translateDataUseCase = new TranslateDataUseCase(aiService),
         saveFileUseCase = new SaveFileUseCase(fileService),
         listFileUseCase = new ListFilesUseCase(fileService),
         readFileUseCase = new ReadFileUseCase(fileService),
-        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(generateCallTranscriptsUseCase, saveFileUseCase),
+        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(generateCallTranscriptsUseCase, saveFileUseCase, translateDataUseCase),
         private listFilesHandler = new ListFilesHandler(listFileUseCase),
         private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(summarizeCallTranscriptUsecase, readFileUseCase),
         private answerQuestionHandler = new AnswerQuestionsHandler(answerQuestionUseCase, readFileUseCase),
@@ -83,13 +85,15 @@ export class CmdApp {
     }
 
     public async runGenerateTranscripts() {
-        this.rl.question("What file name do you prefer to save it? ",  async (response: string) => {
-            const generatedCall = await this.generateCallTranscriptHandler.handle(this.FILES_FOLDER, response)
-            
-            console.log("\nThe generated call is:")
-            console.log(generatedCall)
+        this.rl.question("What file name do you prefer to save it? ",  async (fileName: string) => {
+            this.rl.question("What language do you prefer for the call? ",  async (language: string) => {
+                const generatedCall = await this.generateCallTranscriptHandler.handle(this.FILES_FOLDER, fileName, language)
+                
+                console.log("\nThe generated call is:")
+                console.log(generatedCall)
 
-            this.showMenu()
+                this.showMenu()
+            })
         });
     }
 
