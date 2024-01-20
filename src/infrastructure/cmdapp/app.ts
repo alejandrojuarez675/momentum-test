@@ -2,10 +2,13 @@ import { AnswerQuestionsHandler } from "../../app/handlers/answerQuestionHandler
 import { GenerateCallTranscriptsHandler } from "../../app/handlers/generateCallTranscriptHandler";
 import { ListFilesHandler } from "../../app/handlers/listFilesHandler";
 import { ReadFileHandler } from "../../app/handlers/readFileHandler";
+import { ShowHistoryHandler } from "../../app/handlers/showHistoryHandler";
 import { SummarizeCallTranscriptsHandler } from "../../app/handlers/summarizeCallTranscriptHandler";
 import { AIService } from "../../app/services/AIService";
+import { DbService } from "../../app/services/dbService";
 import { FileService } from "../../app/services/fileService";
-import { OpenAIClient } from "../adapters/openAIClient";
+import { MongoDbClient } from "../adapters/db/mongoClient";
+import { OpenAIClient } from "../adapters/clients/openAIClient";
 const readline = require("readline");
 
 export class CmdApp {
@@ -20,12 +23,15 @@ export class CmdApp {
     constructor(
         openAiClient = new OpenAIClient(),
         fileService = new FileService(),
+        mongoDbClient = new MongoDbClient(),
         aiService = new AIService(openAiClient),
+        dbService = new DbService(mongoDbClient),
         private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(aiService, fileService),
         private listFilesHandler = new ListFilesHandler(fileService),
         private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(aiService, fileService),
-        private answerQuestionHandler = new AnswerQuestionsHandler(aiService, fileService),
+        private answerQuestionHandler = new AnswerQuestionsHandler(aiService, fileService, dbService),
         private readFileHandler = new ReadFileHandler(fileService),
+        private showHistoryHandler = new ShowHistoryHandler(dbService),
     ) {}
 
     public start(): void {
@@ -43,6 +49,7 @@ export class CmdApp {
         console.log("3 - show content of file")
         console.log("4 - Summarized call transcript")
         console.log("5 - Ask a question")
+        console.log("6 - show history of Q&A")
 
         // TODO replace for $ npm install prompt-sync
         this.rl.question("What is your option? ",  (response: string) => {
@@ -67,6 +74,9 @@ export class CmdApp {
                     break
                 case "5":
                     await this.askQuestions()
+                    break
+                case "6":
+                    await this.showHistory()
                     break
                 default:
                     console.log("Have a error in your option, please write again")
@@ -132,5 +142,23 @@ export class CmdApp {
                 });
             });
         });
+    }
+
+    showHistory() {
+        this.rl.question("What file do you want to analyze to ask questions? ",  async (nameFile: string) => {
+            const history = await this.showHistoryHandler.handle(nameFile)
+
+            console.log(`The history for file ${nameFile} is the follow:`)
+            if (!history || history.length == 0) 
+                console.log("Don't have any saved question for file " + nameFile)
+            
+            history.forEach(x => {
+                console.log("-----")
+                console.log("user: " + x.question)
+                console.log("app: " + x.answer)
+            })
+
+            this.showMenu()
+        })
     }
 }

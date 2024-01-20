@@ -1,4 +1,4 @@
-import { IClientAI } from "../../app/ports/IClientAI";
+import { IClientAI } from "../../../app/ports/IClientAI";
 import OpenAI from "openai";
 
 export class OpenAIClient implements IClientAI {
@@ -20,9 +20,8 @@ export class OpenAIClient implements IClientAI {
         },
         {
           role: "user",
-          content: `I need to respond the question "${question}" based on the information on 
-                  the next text: "${data}".
-                  Please I need the in ${language}`,
+          content: `I need in ${language} the respond of the next question: "${question}" based on the information on 
+                  the next text: "${data}".`,
         }
       ],
       model: this.MODEL,
