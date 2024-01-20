@@ -25,7 +25,8 @@ export class OpenAIClient implements IClientAI {
       model: this.MODEL,
     });
     
-    return summarizedData.choices[0].message.content || "";  }
+    return summarizedData.choices[0].message.content || "";  
+  }
 
   async summarizedData(data: String): Promise<String> {
     console.log("summarizing data...")
