@@ -31,7 +31,7 @@ You must first install NodeJs and Npm in order to use this application. Once you
 
 This command install, build to Js and start the application.
 
-If you are a developer and you want to run locally with Nodemoon, you can run:
+If you are a developer and you want to run locally with Nodemoon, you can execute:
 
     $ npm i
     $ npm run dev
