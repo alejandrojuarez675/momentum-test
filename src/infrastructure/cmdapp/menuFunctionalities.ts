@@ -17,7 +17,6 @@ export class MenuFunctionalities {
     });
 
     FILES_FOLDER = "tmp/files/"
-    // FILES_FOLDER = ""
 
     constructor(
         openAiClient = new OpenAIClient(),
