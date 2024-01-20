@@ -6,7 +6,7 @@ export class ReadFileUseCase {
         private fileService: FileService
     ) {}
     
-    public getContentFrom(data: {dir: String, name: String}): String {
-        return this.fileService.getContentFromFile(data)
+    public async getContentFrom(data: {dir: String, name: String}): Promise<String> {
+        return await this.fileService.getContentFromFile(data)
     }
 }

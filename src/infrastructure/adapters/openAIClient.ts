@@ -6,11 +6,11 @@ export class OpenAIClient implements IClientAI {
   constructor(private openAi = new OpenAI()) {}
 
   askAQuestionBasedOnData(data: String, question: String): String {
-    throw new Error("Method not implemented.");
+    return data
   }
 
   summarizedData(data: String): String {
-    throw new Error("Method not implemented.");
+    return data
   }
 
   async generateSalesCallTranscript(): Promise<String> {

@@ -41,10 +41,10 @@ export class CmdApp {
                     await this.menuFunctionalities.listFiles()
                     break
                 case "3":
-                    this.menuFunctionalities.summarizedCallTranscript()
+                    await this.menuFunctionalities.summarizedCallTranscript()
                     break
                 case "4":
-                    this.menuFunctionalities.askQuestions()
+                    await this.menuFunctionalities.askQuestions()
                     break
                 default:
                     console.log("Have a error in your option, please write again")
@@ -53,7 +53,7 @@ export class CmdApp {
             }    
         } catch (error) {
             console.error("Error: " + error)
+            this.showMenu()
         }
-        this.showMenu()
     }
 }

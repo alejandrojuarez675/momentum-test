@@ -50,9 +50,9 @@ export class MenuFunctionalities {
         filesNames.forEach(name => console.log("- " + name))
     }
 
-    public summarizedCallTranscript() {
-        this.rl.question("What file do you want to summarized? ",  (response: string) => {
-            const data = this.readFile.getContentFrom({
+    public async summarizedCallTranscript() {
+        this.rl.question("What file do you want to summarized? ",  async (response: string) => {
+            const data = await this.readFile.getContentFrom({
                 dir: this.FILES_FOLDER,
                 name: `${response}.txt`
             })
@@ -64,9 +64,9 @@ export class MenuFunctionalities {
         });
     }
 
-    public askQuestions() {
-        this.rl.question("What file do you want to analyze to ask questions? ",  (response: string) => {
-            const data = this.readFile.getContentFrom({
+    public async askQuestions() {
+        this.rl.question("What file do you want to analyze to ask questions? ",  async (response: string) => {
+            const data = await this.readFile.getContentFrom({
                 dir: this.FILES_FOLDER,
                 name: `${response}.txt`
             })
