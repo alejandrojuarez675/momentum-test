@@ -1,22 +1,22 @@
-var fs = require("fs");
+import { promises as fs } from 'fs';
 
 export class FileService {
-  public listFilesFromThatFolder(dir: String): String[] {
-    return [];
+
+  public async listFilesFromThatFolder(dir: String): Promise<String[]> {
+    let result = []
+    result = await fs.readdir(dir.toString());
+    return result;
   }
 
   public getContentFromFile(data: { dir: String; name: String }): String {
     return "";
   }
 
-  public saveFile(data: { dir: String; name: String; data: String }) {
-    fs.writeFile(
+  public async saveFile(data: { dir: String; name: String; data: String }) {
+    await fs.writeFile(
       data.dir.concat(data.name.toString()),
-      data.data,
-      function (err: any) {
-        if (err) throw err;
-        console.log("Saved!");
-      }
+      data.data
     );
+    console.log(`saved on ${data.dir}${data.name}`)
   }
 }

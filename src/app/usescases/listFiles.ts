@@ -6,7 +6,7 @@ export class ListFilesUseCase {
         private fileService: FileService
     ) {}
     
-    public listFilesFrom(dir: String): String[] {
-        return this.fileService.listFilesFromThatFolder(dir)
+    public async listFilesFrom(dir: String): Promise<String[]> {
+        return await this.fileService.listFilesFromThatFolder(dir)
     }
 }

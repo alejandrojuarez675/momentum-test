@@ -35,8 +35,8 @@ export class MenuFunctionalities {
 
         console.log(generatedCall);
 
-        this.rl.question("What file name do you prefer to save it? ",  (response: string) => {
-            this.saveFile.save({
+        this.rl.question("What file name do you prefer to save it? ",  async (response: string) => {
+            await this.saveFile.save({
                 dir: this.FILES_FOLDER,
                 name: `${response}.txt`,
                 data: generatedCall
@@ -44,9 +44,9 @@ export class MenuFunctionalities {
         });
     }
 
-    public listFiles() {
+    public async listFiles() {
         console.log("List of saved files:")
-        const filesNames = this.listFile.listFilesFrom(this.FILES_FOLDER)
+        const filesNames = await this.listFile.listFilesFrom(this.FILES_FOLDER)
         filesNames.forEach(name => console.log("- " + name))
     }
 

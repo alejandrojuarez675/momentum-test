@@ -31,14 +31,14 @@ export class CmdApp {
         });
     }
 
-    private processResponse(response: String): void {
+    private async processResponse(response: String): Promise<void> {
         try {
             switch (response) {
                 case "1":
-                    this.menuFunctionalities.runGenerateTranscripts()
+                    await this.menuFunctionalities.runGenerateTranscripts()
                     break
                 case "2":
-                    this.menuFunctionalities.listFiles()
+                    await this.menuFunctionalities.listFiles()
                     break
                 case "3":
                     this.menuFunctionalities.summarizedCallTranscript()
@@ -53,7 +53,7 @@ export class CmdApp {
             }    
         } catch (error) {
             console.error("Error: " + error)
-            this.showMenu()
         }
+        this.showMenu()
     }
 }
