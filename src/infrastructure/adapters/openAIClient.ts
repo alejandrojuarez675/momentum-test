@@ -22,7 +22,7 @@ export class OpenAIClient implements IClientAI {
           role: "user",
           content: `I need to respond the question "${question}" based on the information on 
                   the next text: "${data}".
-                  Please I need it in ${language}`,
+                  Please I need the in ${language}`,
         }
       ],
       model: this.MODEL,
@@ -38,12 +38,12 @@ export class OpenAIClient implements IClientAI {
       messages: [
         {
           role: "system",
-          content: `You are a assistant that can summarized call transcriptions.`,
+          content: `You can summarize call transcriptions and translate the summary to another languages`,
         },
         {
           role: "user",
-          content: `I need to summarize the next text: "${data}".
-                  Please I need the summary in ${language}`,
+          content: `I need in ${language} a summary of the key points from of the next call transcript: "${data}".
+                    The format of the summary has to be in a paragraph.`,
         }
       ],
       model: this.MODEL,
