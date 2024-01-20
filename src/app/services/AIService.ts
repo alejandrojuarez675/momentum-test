@@ -10,8 +10,8 @@ export class AIService {
         return this.clientAI.askAQuestionBasedOnData(data, question)
     }
 
-    public generateSalesCallTranscript(): String {
-        return this.clientAI.generateSalesCallTranscript()
+    public async generateSalesCallTranscript(): Promise<String> {
+        return await this.clientAI.generateSalesCallTranscript()
     }
 
     public summarizeData(data: String): String {

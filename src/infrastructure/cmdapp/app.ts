@@ -25,6 +25,7 @@ export class CmdApp {
         console.log("----------------------------------------------------")
         MENU.data.forEach(item => console.log(item.option + " - " + item.title))
 
+        // TODO replace for $ npm install prompt-sync
         this.rl.question("What is your option? ",  (response: string) => {
             this.processResponse(response)
         });

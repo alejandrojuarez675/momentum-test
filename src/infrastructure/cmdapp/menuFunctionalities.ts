@@ -16,7 +16,8 @@ export class MenuFunctionalities {
         output: process.stdout,
     });
 
-    FILES_FOLDER = "./../../tmp/files"
+    FILES_FOLDER = "tmp/files/"
+    // FILES_FOLDER = ""
 
     constructor(
         openAiClient = new OpenAIClient(),
@@ -30,8 +31,8 @@ export class MenuFunctionalities {
         private readFile = new ReadFileUseCase(fileService),
     ){}
 
-    public runGenerateTranscripts() {
-        const generatedCall = this.generateCallTranscripts.generateSalesCallTranscript();
+    public async runGenerateTranscripts() {
+        const generatedCall = await this.generateCallTranscripts.generateSalesCallTranscript();
 
         console.log(generatedCall);
 
