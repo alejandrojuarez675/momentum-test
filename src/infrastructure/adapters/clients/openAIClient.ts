@@ -8,7 +8,7 @@ export class OpenAIClient implements IClientAI {
   constructor(private openAi = new OpenAI()) {}
 
   async askAQuestionBasedOnData(data: String, question: String, language: String): Promise<String> {
-    console.log("searching a response on data...")
+    console.debug("searching a response on data...")
     
     const summarizedData = await this.openAi.chat.completions.create({
       messages: [
@@ -31,7 +31,7 @@ export class OpenAIClient implements IClientAI {
   }
 
   async summarizedData(data: String, language: String): Promise<String> {
-    console.log("summarizing data...")
+    console.debug("summarizing data...")
     
     const summarizedData = await this.openAi.chat.completions.create({
       messages: [
@@ -52,7 +52,7 @@ export class OpenAIClient implements IClientAI {
   }
 
   async generateSalesCallTranscript(language: String): Promise<String> {
-    console.log("generating sales call transcription...")
+    console.debug("generating sales call transcription...")
 
     const completion = await this.openAi.chat.completions.create({
       messages: [
@@ -71,7 +71,7 @@ export class OpenAIClient implements IClientAI {
   }
 
   async translate(data: String, from: String, to: String): Promise<String> {
-    console.log(`translating data from ${from} to ${to}...`)
+    console.debug(`translating data from ${from} to ${to}...`)
 
     const completion = await this.openAi.chat.completions.create({
       messages: [

@@ -17,6 +17,6 @@ export class FileService {
       data.dir.concat(data.name.toString()),
       data.data
     );
-    console.log(`saved on ${data.dir}${data.name}`)
+    console.debug(`saved on ${data.dir}${data.name}`)
   }
 }

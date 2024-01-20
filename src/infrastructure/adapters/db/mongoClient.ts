@@ -8,8 +8,8 @@ export class MongoDbClient implements IDbClient {
 
     constructor(){
         mongoose.connect('mongodb://localhost/momentum-db', { useNewUrlParser: true, useUnifiedTopology: true })
-            .then(() => console.log('MongoDB connected'))
-            .catch((err: any) => console.log(err));
+            .then(() => console.debug('MongoDB connected'))
+            .catch((err: any) => console.debug(err));
     }
 
     async getHistoryByFileName(fileName: String): Promise<QuestionAndAnswer[]> {
@@ -28,7 +28,7 @@ export class MongoDbClient implements IDbClient {
         })
 
         await newQAndA.save()
-        console.log("Saved question and answer on the DB...")
+        console.debug("Saved question and answer on the DB...")
     }
 
 }
