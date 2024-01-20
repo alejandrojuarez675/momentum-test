@@ -17,4 +17,8 @@ export class AIService {
     public async summarizeData(data: String): Promise<String> {
         return await this.clientAI.summarizedData(data)
     }
+
+    public async translate(data: String, from: String, to: String): Promise<String> {
+        return await this.clientAI.translate(data, from, to)
+    }
 }

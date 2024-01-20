@@ -66,4 +66,24 @@ export class OpenAIClient implements IClientAI {
     
     return completion.choices[0].message.content || "";
   }
+
+  async translate(data: String, from: String, to: String): Promise<String> {
+    console.log(`translating data from ${from} to ${to}...`)
+
+    const completion = await this.openAi.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: `You will be provided with a sentence in ${from}, and your task is to translate it into ${to}.`,
+        },
+        {
+          role: "user",
+          content: data.toString(),
+        }
+      ],
+      model: this.MODEL,
+    });
+    
+    return completion.choices[0].message.content || "";
+  }
 }
