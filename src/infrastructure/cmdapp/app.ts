@@ -1,6 +1,7 @@
 import { AnswerQuestionsHandler } from "../../app/handlers/answerQuestionHandler";
 import { GenerateCallTranscriptsHandler } from "../../app/handlers/generateCallTranscriptHandler";
 import { ListFilesHandler } from "../../app/handlers/listFilesHandler";
+import { ReadFileHandler } from "../../app/handlers/readFileHandler";
 import { SummarizeCallTranscriptsHandler } from "../../app/handlers/summarizeCallTranscriptHandler";
 import { AIService } from "../../app/services/AIService";
 import { FileService } from "../../app/services/fileService";
@@ -10,9 +11,7 @@ import { ListFilesUseCase } from "../../app/usescases/listFilesUseCase";
 import { ReadFileUseCase } from "../../app/usescases/readFileUseCase";
 import { SaveFileUseCase } from "../../app/usescases/saveFileUseCase";
 import { SummarizeDataUseCase } from "../../app/usescases/summarizeDataUseCase";
-import { TranslateDataUseCase } from "../../app/usescases/translateDataUseCase";
 import { OpenAIClient } from "../adapters/openAIClient";
-import { MENU } from "./menu";
 const readline = require("readline");
 
 export class CmdApp {
@@ -38,6 +37,7 @@ export class CmdApp {
         private listFilesHandler = new ListFilesHandler(listFileUseCase),
         private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(summarizeCallTranscriptUsecase, readFileUseCase),
         private answerQuestionHandler = new AnswerQuestionsHandler(answerQuestionUseCase, readFileUseCase),
+        private readFileHandler = new ReadFileHandler(readFileUseCase),
     ) {}
 
     public start(): void {
@@ -50,7 +50,11 @@ export class CmdApp {
         console.log("----------------------------------------------------")
         console.log("Choose a option:")
         console.log("----------------------------------------------------")
-        MENU.data.forEach(item => console.log(item.option + " - " + item.title))
+        console.log("1 - Generate call transcripts")
+        console.log("2 - List existing call transcripts")
+        console.log("3 - show content of file")
+        console.log("4 - Summarized call transcript")
+        console.log("5 - Ask a question")
 
         // TODO replace for $ npm install prompt-sync
         this.rl.question("What is your option? ",  (response: string) => {
@@ -68,13 +72,17 @@ export class CmdApp {
                     await this.listFiles()
                     break
                 case "3":
-                    await this.summarizedCallTranscript()
+                    await this.readFile()
                     break
                 case "4":
+                    await this.summarizedCallTranscript()
+                    break
+                case "5":
                     await this.askQuestions()
                     break
                 default:
                     console.log("Have a error in your option, please write again")
+                    this.showMenu()
                     break
             }    
         } catch (error) {
@@ -102,6 +110,14 @@ export class CmdApp {
         filesNames.forEach(name => console.log("- " + name))
 
         this.showMenu()
+    }
+
+    public async readFile() {
+        this.rl.question("What file name do you prefer to read it? ",  async (fileName: string) => {
+            const data = await this.readFileHandler.handle(this.FILES_FOLDER, fileName)
+            console.log(data)
+            this.showMenu()
+        });
     }
 
     public async summarizedCallTranscript() {
