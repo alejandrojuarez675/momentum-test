@@ -3,7 +3,7 @@
 ## About the app
 This application interacts with the OpenAi API, runs in Node.js using TypeScript, and uses MongoDB as its database. The console is where the user interface and output are located.
 
-The application's hexagonal architecture makes it simple to alter the database or artificial intelligence. Furthermore, since the primary logic is independent of the other logic, adding a REST API in the future is simple with a framework like ExpressJs.
+The application's hexagonal architecture makes it simple to alter the database or artificial intelligence client. Furthermore, since the primary logic is independent of the other logic, adding a REST API in the future is simple with a framework like ExpressJs.
 
 
 ## What did I have to do?

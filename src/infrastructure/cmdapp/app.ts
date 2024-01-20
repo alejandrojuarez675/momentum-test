@@ -44,14 +44,15 @@ export class CmdApp {
         console.log("----------------------------------------------------")
         console.log("Choose a option:")
         console.log("----------------------------------------------------")
-        console.log("1 - Generate call transcripts")
-        console.log("2 - List existing call transcripts")
-        console.log("3 - show content of file")
-        console.log("4 - Summarized call transcript")
-        console.log("5 - Ask a question")
-        console.log("6 - show history of Q&A")
+        console.log("1 - Generate a call transcription")
+        console.log("2 - List existing call transcriptions files")
+        console.log("3 - Show content of saved call transcriptions")
+        console.log("4 - Summarized a call transcription")
+        console.log("5 - Ask a question about a call transcription")
+        console.log("6 - Show history of Question & Answer")
+        console.log()
 
-        this.rl.question("What is your option? ",  (response: string) => {
+        this.rl.question("option: ",  (response: string) => {
             this.processResponse(response)
         });
     }
@@ -78,7 +79,7 @@ export class CmdApp {
                     await this.showHistory()
                     break
                 default:
-                    console.log("Have a error in your option, please write again")
+                    console.log("Have a error in your option, please select again")
                     this.showMenu()
                     break
             }    
@@ -89,8 +90,9 @@ export class CmdApp {
     }
 
     public async runGenerateTranscripts() {
-        this.rl.question("What file name do you prefer to save it? ",  async (fileName: string) => {
-            this.rl.question("What language do you prefer for the call? ",  async (language: string) => {
+        console.log("")
+        this.rl.question("filename (without extension): ",  async (fileName: string) => {
+            this.rl.question("desired language: ",  async (language: string) => {
                 const generatedCall = await this.generateCallTranscriptHandler.handle(this.FILES_FOLDER, fileName, language)
                 
                 console.log("\nThe generated call is:")
@@ -110,16 +112,17 @@ export class CmdApp {
     }
 
     public async readFile() {
-        this.rl.question("What file name do you prefer to read it? ",  async (fileName: string) => {
+        this.rl.question("filename (without extension): ",  async (fileName: string) => {
             const data = await this.readFileHandler.handle(this.FILES_FOLDER, fileName)
+            console.log("\nThe content is:")
             console.log(data)
             this.showMenu()
         });
     }
 
     public async summarizedCallTranscript() {
-        this.rl.question("What file do you want to summarized? ",  async (response: string) => {
-            this.rl.question("What language do you prefer for the call? ",  async (language: string) => {
+        this.rl.question("filename (without extension): ",  async (response: string) => {
+            this.rl.question("desired language: ",  async (language: string) => {
                 const summarizedData = await this.summarizeCallTranscriptHandler.handle(this.FILES_FOLDER, response, language)
                 console.log("\nThe summary of the call is: ")
                 console.log(summarizedData)
@@ -130,9 +133,9 @@ export class CmdApp {
     }
 
     public async askQuestions() {
-        this.rl.question("What file do you want to analyze to ask questions? ",  async (response: string) => {
-            this.rl.question("ask the questions: ",  async (question: string) => {
-                this.rl.question("What language do you prefer for the call? ",  async (language: string) => {
+        this.rl.question("filename (without extension): ",  async (response: string) => {
+            this.rl.question("question: ",  async (question: string) => {
+                this.rl.question("desired language: ",  async (language: string) => {
                     const answer = await this.answerQuestionHandler.handle(this.FILES_FOLDER, response, question, language)
                     console.log("\nThe answer is: ")
                     console.log(answer)
@@ -144,10 +147,10 @@ export class CmdApp {
     }
 
     showHistory() {
-        this.rl.question("What file do you want to analyze to ask questions? ",  async (nameFile: string) => {
+        this.rl.question("filename (without extension): ",  async (nameFile: string) => {
             const history = await this.showHistoryHandler.handle(nameFile)
 
-            console.log(`The history for file ${nameFile} is the follow:`)
+            console.log(`\nThe history for file ${nameFile} is the follow:`)
             if (!history || history.length == 0) 
                 console.log("Don't have any saved question for file " + nameFile)
             
