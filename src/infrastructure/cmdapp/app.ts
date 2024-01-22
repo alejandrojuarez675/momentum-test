@@ -112,8 +112,17 @@ export class CmdApp {
     private async listFiles() {
         console.log("\nList of saved files:")
         const filesNames = await this.listFilesHandler.handle(this.FILES_FOLDER)
-        filesNames.forEach(name => console.log("- " + name))
+        
+        try {
+            if (filesNames == null || filesNames.length == 0) {
+                console.log("\nList empty")
+            }
 
+            filesNames.forEach(name => console.log("- " + name))
+        } catch (error) {
+            this.handleErrors(error)        
+        }
+        
         this.showMenu()
     }
 
@@ -164,15 +173,19 @@ export class CmdApp {
         const fileName = await this.rl.question(this.getFileNameText())
         const history = await this.showHistoryHandler.handle(fileName)
 
-        console.log(`\nThe history for file ${fileName} is the follow:`)
-        if (!history || history.length == 0) 
-            console.log("Don't have any saved question for file " + fileName)
-        
-        history.forEach(x => {
-            console.log("-----")
-            console.log("user: " + x.question)
-            console.log("app: " + x.answer)
-        })
+        try {
+            console.log(`\nThe history for file ${fileName} is the follow:`)
+            if (!history || history.length == 0) 
+                console.log("Don't have any saved question for file " + fileName)
+            
+            history.forEach(x => {
+                console.log("-----")
+                console.log("user: " + x.question)
+                console.log("app: " + x.answer)
+            })
+        } catch (error) {
+            this.handleErrors(error)        
+        }
 
         this.showMenu()
     }
