@@ -1,9 +1,9 @@
-import { FileService } from "../services/fileService";
+import { IFileService } from "../services/interfaces/IFileService";
 
 export class ReadFileHandler {
 
     constructor(
-        private fileService: FileService,
+        private fileService: IFileService,
     ) {}
     /**
     * @throws {FileNotFoundError}

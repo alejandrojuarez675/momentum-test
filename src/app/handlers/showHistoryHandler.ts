@@ -1,10 +1,10 @@
 import { QuestionAndAnswer } from "../../domain/questionAnswerDomain";
-import { DbService } from "../services/dbService";
+import { IDbService } from "../services/interfaces/IDbService";
 
 export class ShowHistoryHandler {
 
     constructor(
-        private dbService: DbService,
+        private dbService: IDbService,
     ) {}
     
     public async handle(fileName: String): Promise<QuestionAndAnswer[]> {

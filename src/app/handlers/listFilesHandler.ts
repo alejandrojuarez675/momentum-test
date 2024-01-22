@@ -1,9 +1,9 @@
-import { FileService } from "../services/fileService";
+import { IFileService } from "../services/interfaces/IFileService";
 
 export class ListFilesHandler {
 
     constructor(
-        private fileService: FileService,    
+        private fileService: IFileService,    
     ){}
 
     public async handle(dir: String) {

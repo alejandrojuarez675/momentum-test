@@ -1,17 +1,11 @@
-jest.mock('../../../src/app/services/AIService')
-jest.mock('../../../src/app/services/FileService')
-jest.mock('../../../src/app/services/LanguageService')
-
 import { expect, jest, test } from '@jest/globals';
-import { InvalidLanguageError } from '../../../src/app/errors/invalidLanguageError';
-import { GenerateCallTranscriptsHandler } from '../../../src/app/handlers/generateCallTranscriptHandler';
-import { FileService } from '../../../src/app/services/fileService';
-import { LanguageService } from '../../../src/app/services/languageService';
-import { AIServiceMock } from '../../mocks/AiServiceMock';
-import { DIR_FILE, FILE_NAME, NOT_ALLOWED_LANGUAGE } from '../../mocks/constants';
-import { ValidLanguage } from '../../../src/domain/validLanguageSupport';
 import { FilenameCannotBeEmptyError } from '../../../src/app/errors/filenameCannotBeEmpty';
+import { GenerateCallTranscriptsHandler } from '../../../src/app/handlers/generateCallTranscriptHandler';
+import { LanguageService } from '../../../src/app/services/languageService';
+import { ValidLanguage } from '../../../src/domain/validLanguageSupport';
+import { AIServiceMock } from '../../mocks/AiServiceMock';
 import { FileServiceMock } from '../../mocks/FilerServiceMock';
+import { DIR_FILE, FILE_NAME, MOCKED_VALID_LANGUAGE } from '../../mocks/constants';
 
 describe('GenerateCallTranscriptsHandler', () => {
 
@@ -24,24 +18,34 @@ describe('GenerateCallTranscriptsHandler', () => {
 
     describe('handle', () => {
 
-        test('have to return the generated call', async () => {
-            expect(await generateCallTranscriptHandler.handle(DIR_FILE, FILE_NAME, ValidLanguage.english))
-                .toBe(await mockedAiService.generateSalesCallTranscript(ValidLanguage.english))
+        test('have to return the generated call transcription using AI', async () => {
+            expect(await generateCallTranscriptHandler.handle(DIR_FILE, FILE_NAME, MOCKED_VALID_LANGUAGE))
+                .toBe(await mockedAiService.generateSalesCallTranscript(MOCKED_VALID_LANGUAGE))
         })
 
-        test('filename cannot be empty', () => {
-            expect(async () => await generateCallTranscriptHandler.handle(DIR_FILE, '', ValidLanguage.english))
+        test('have to validate that filename cannot be empty', () => {
+            expect(async () => await generateCallTranscriptHandler.handle(DIR_FILE, '', MOCKED_VALID_LANGUAGE))
                 .rejects
                 .toThrow(FilenameCannotBeEmptyError)
         })
 
         // TODO fix
-        // test('only allow valid languages', async () => {
+        // test('have to validate that only allow valid languages', async () => {
         //     await expect(async () => 
         //             await generateCallTranscriptHandler.handle(DIR_FILE, FILE_NAME, NOT_ALLOWED_LANGUAGE))
         //         .rejects
         //         .toThrow(InvalidLanguageError)
         // })
+
+        test('have to save the transcription on a file', async () => {
+            const spySaveFile = jest.spyOn(mockedFileService, 'saveFile');
+
+            expect(await generateCallTranscriptHandler.handle(DIR_FILE, FILE_NAME, MOCKED_VALID_LANGUAGE))
+                .toBe(await mockedAiService.generateSalesCallTranscript(MOCKED_VALID_LANGUAGE))
+
+            expect(spySaveFile).toHaveBeenCalled()
+
+        })
     })
 
 })

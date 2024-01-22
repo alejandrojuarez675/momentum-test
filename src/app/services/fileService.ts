@@ -1,7 +1,8 @@
 import { promises as fs } from 'fs';
 import { FileNotFoundError } from '../errors/fileNotFoundError';
+import { IFileService } from './interfaces/IFileService';
 
-export class FileService {
+export class FileService implements IFileService {
 
   public async listFilesFromThatFolder(dir: String): Promise<String[]> {
     let result = []

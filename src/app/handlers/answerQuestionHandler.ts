@@ -1,14 +1,16 @@
-import { AIService } from "../services/AIService"
-import { DbService } from "../services/dbService"
-import { FileService } from "../services/fileService"
+import { FilenameCannotBeEmptyError } from "../errors/filenameCannotBeEmpty"
+import { QuestionCannotBeEmptyError } from "../errors/questionCannotBeEmpty"
+import { IAiService } from "../services/interfaces/IAiService"
+import { IDbService } from "../services/interfaces/IDbService"
+import { IFileService } from "../services/interfaces/IFileService"
 import { LanguageService } from "../services/languageService"
 
 export class AnswerQuestionsHandler {
 
     constructor(
-        private aiService: AIService,
-        private fileService: FileService,
-        private dbService: DbService,
+        private aiService: IAiService,
+        private fileService: IFileService,
+        private dbService: IDbService,
         private languageService: LanguageService,
     ){}
 
@@ -17,6 +19,8 @@ export class AnswerQuestionsHandler {
     * @throws {FileNotFoundError}
     */
     public async handle(dir: String, nameFile: String, question: String, language: String): Promise<String> {
+        if (!nameFile) { throw new FilenameCannotBeEmptyError() }
+        if (!question) { throw new QuestionCannotBeEmptyError() }
         const validLanguage = this.languageService.validateLanguage(language)
         
         const data = await this.fileService.getContentFromFile({
