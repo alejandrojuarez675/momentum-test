@@ -1,3 +1,4 @@
+import { ValidLanguage } from "../../domain/validLanguageSupport";
 import { IClientAI } from "../ports/IClientAI";
 
 export class AIService {
@@ -6,19 +7,19 @@ export class AIService {
         private clientAI: IClientAI
     ) {}
 
-    async askAQuestionBasedOnData(data: String, question: String, language: String): Promise<String> {
+    async askAQuestionBasedOnData(data: String, question: String, language: ValidLanguage): Promise<String> {
         return await this.clientAI.askAQuestionBasedOnData(data, question, language)
     }
 
-    public async generateSalesCallTranscript(language: String): Promise<String> {
+    public async generateSalesCallTranscript(language: ValidLanguage): Promise<String> {
         return await this.clientAI.generateSalesCallTranscript(language)
     }
 
-    public async summarizeData(data: String, language: String): Promise<String> {
+    public async summarizeData(data: String, language: ValidLanguage): Promise<String> {
         return await this.clientAI.summarizedData(data, language)
     }
 
-    public async translate(data: String, from: String, to: String): Promise<String> {
+    public async translate(data: String, from: ValidLanguage, to: ValidLanguage): Promise<String> {
         return await this.clientAI.translate(data, from, to)
     }
 }

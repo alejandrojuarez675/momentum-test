@@ -9,6 +9,7 @@ import { DbService } from "../../app/services/dbService";
 import { FileService } from "../../app/services/fileService";
 import { MongoDbClient } from "../adapters/db/mongoClient";
 import { OpenAIClient } from "../adapters/clients/openAIClient";
+import { LanguageService } from "../../app/services/languageService";
 const readline = require("readline");
 
 export class CmdApp {
@@ -26,10 +27,11 @@ export class CmdApp {
         mongoDbClient = new MongoDbClient(),
         aiService = new AIService(openAiClient),
         dbService = new DbService(mongoDbClient),
-        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(aiService, fileService),
+        private languageService = new LanguageService(),
+        private generateCallTranscriptHandler = new GenerateCallTranscriptsHandler(aiService, fileService, languageService),
         private listFilesHandler = new ListFilesHandler(fileService),
-        private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(aiService, fileService),
-        private answerQuestionHandler = new AnswerQuestionsHandler(aiService, fileService, dbService),
+        private summarizeCallTranscriptHandler = new SummarizeCallTranscriptsHandler(aiService, fileService,languageService),
+        private answerQuestionHandler = new AnswerQuestionsHandler(aiService, fileService, dbService, languageService),
         private readFileHandler = new ReadFileHandler(fileService),
         private showHistoryHandler = new ShowHistoryHandler(dbService),
     ) {}
@@ -39,7 +41,7 @@ export class CmdApp {
         this.showMenu()
     }
 
-    private showMenu() {
+    private async showMenu() {
         console.log()
         console.log("----------------------------------------------------")
         console.log("Choose a option:")
@@ -92,13 +94,17 @@ export class CmdApp {
     public async runGenerateTranscripts() {
         console.log("")
         this.rl.question("filename (without extension): ",  async (fileName: string) => {
-            this.rl.question("desired language: ",  async (language: string) => {
-                const generatedCall = await this.generateCallTranscriptHandler.handle(this.FILES_FOLDER, fileName, language)
-                
-                console.log("\nThe generated call is:")
-                console.log(generatedCall)
-
-                this.showMenu()
+            this.rl.question(`desired language (${this.languageService.getValidLanguages()
+                .map(x => x.toString()).join('-')}): `,  async (language: string) => {
+                    try {
+                        const generatedCall = await this.generateCallTranscriptHandler.handle(this.FILES_FOLDER, fileName, language)
+                    
+                        console.log("\nThe generated call is:")
+                        console.log(generatedCall)                        
+                    } catch (error) {
+                        console.log("\nInvalid language, please try again")
+                    }
+                    this.showMenu()
             })
         });
     }
@@ -122,12 +128,16 @@ export class CmdApp {
 
     public async summarizedCallTranscript() {
         this.rl.question("filename (without extension): ",  async (response: string) => {
-            this.rl.question("desired language: ",  async (language: string) => {
-                const summarizedData = await this.summarizeCallTranscriptHandler.handle(this.FILES_FOLDER, response, language)
-                console.log("\nThe summary of the call is: ")
-                console.log(summarizedData)
-
-                this.showMenu()
+            this.rl.question(`desired language (${this.languageService.getValidLanguages()
+                .map(x => x.toString()).join('-')}): `,  async (language: string) => {
+                    try {
+                        const summarizedData = await this.summarizeCallTranscriptHandler.handle(this.FILES_FOLDER, response, language)
+                        console.log("\nThe summary of the call is: ")
+                        console.log(summarizedData)
+                    } catch (error) {
+                        console.log("\nInvalid language, please try again")
+                    }
+                    this.showMenu()
             });
         });
     }
@@ -135,12 +145,17 @@ export class CmdApp {
     public async askQuestions() {
         this.rl.question("filename (without extension): ",  async (response: string) => {
             this.rl.question("question: ",  async (question: string) => {
-                this.rl.question("desired language: ",  async (language: string) => {
-                    const answer = await this.answerQuestionHandler.handle(this.FILES_FOLDER, response, question, language)
-                    console.log("\nThe answer is: ")
-                    console.log(answer)
+                this.rl.question(`desired language (${this.languageService.getValidLanguages()
+                    .map(x => x.toString()).join('-')}): `,  async (language: string) => {
+                        try {
+                            const answer = await this.answerQuestionHandler.handle(this.FILES_FOLDER, response, question, language)
+                            console.log("\nThe answer is: ")
+                            console.log(answer)
+                        } catch (error) {
+                            console.log("\nInvalid language, please try again")
+                        }
 
-                    this.showMenu()
+                        this.showMenu()
                 });
             });
         });
@@ -163,4 +178,5 @@ export class CmdApp {
             this.showMenu()
         })
     }
+
 }
