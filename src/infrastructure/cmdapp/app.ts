@@ -118,11 +118,14 @@ export class CmdApp {
                 console.log("\nList empty")
             }
 
-            filesNames.forEach(name => console.log("- " + name))
+            filesNames
+                .map( x => x.split(".txt")[0])
+                .forEach(name => console.log("- " + name))
+
         } catch (error) {
             this.handleErrors(error)        
         }
-        
+
         this.showMenu()
     }
 
@@ -191,7 +194,7 @@ export class CmdApp {
     }
 
     private getOptionSelectedText = () =>  "option: "
-    private getFileNameText = () =>  "filename (without extension): "
+    private getFileNameText = () =>  "file id: "
     private getQuestionText = () =>  "question: "
     private getLanguageText = () =>  `desired language (${
         this.languageService.getValidLanguages().map(x => x.toString()).join('-')
