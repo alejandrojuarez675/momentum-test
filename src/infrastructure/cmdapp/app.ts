@@ -10,14 +10,9 @@ import { FileService } from "../../app/services/fileService";
 import { MongoDbClient } from "../adapters/db/mongoClient";
 import { OpenAIClient } from "../adapters/clients/openAIClient";
 import { LanguageService } from "../../app/services/languageService";
-const readline = require("readline");
+import * as readline from 'node:readline/promises';
 
 export class CmdApp {
-
-    rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
 
     FILES_FOLDER = "tmp/files/"
 
@@ -35,6 +30,11 @@ export class CmdApp {
         private readFileHandler = new ReadFileHandler(fileService),
         private showHistoryHandler = new ShowHistoryHandler(dbService),
     ) {}
+
+    rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
 
     public start(): void {
         console.log("Console application starting...")
@@ -54,14 +54,13 @@ export class CmdApp {
         console.log("6 - Show history of Question & Answer")
         console.log()
 
-        this.rl.question("option: ",  (response: string) => {
-            this.processResponse(response)
-        });
+        const optionSelected = await this.rl.question(this.getOptionSelectedText())
+        this.processOptionSelected(optionSelected)
     }
 
-    private async processResponse(response: String): Promise<void> {
+    private async processOptionSelected(optionSelected: String): Promise<void> {
         try {
-            switch (response) {
+            switch (optionSelected) {
                 case "1":
                     await this.runGenerateTranscripts()
                     break
@@ -91,25 +90,24 @@ export class CmdApp {
         }
     }
 
-    public async runGenerateTranscripts() {
+    private async runGenerateTranscripts() {
         console.log("")
-        this.rl.question("filename (without extension): ",  async (fileName: string) => {
-            this.rl.question(`desired language (${this.languageService.getValidLanguages()
-                .map(x => x.toString()).join('-')}): `,  async (language: string) => {
-                    try {
-                        const generatedCall = await this.generateCallTranscriptHandler.handle(this.FILES_FOLDER, fileName, language)
-                    
-                        console.log("\nThe generated call is:")
-                        console.log(generatedCall)                        
-                    } catch (error) {
-                        console.log("\nInvalid language, please try again")
-                    }
-                    this.showMenu()
-            })
-        });
+        const fileName = await this.rl.question(this.getFileNameText())
+        const language = await this.rl.question(this.getLanguageText())
+
+        try {
+            const generatedCall = await this.generateCallTranscriptHandler.handle(this.FILES_FOLDER, fileName, language)
+        
+            console.log("\nThe generated call is:")
+            console.log(generatedCall)                        
+        } catch (error) {
+            console.log("\nInvalid language, please try again")
+        }
+
+        this.showMenu()
     }
 
-    public async listFiles() {
+    private async listFiles() {
         console.log("\nList of saved files:")
         const filesNames = await this.listFilesHandler.handle(this.FILES_FOLDER)
         filesNames.forEach(name => console.log("- " + name))
@@ -117,66 +115,66 @@ export class CmdApp {
         this.showMenu()
     }
 
-    public async readFile() {
-        this.rl.question("filename (without extension): ",  async (fileName: string) => {
-            const data = await this.readFileHandler.handle(this.FILES_FOLDER, fileName)
-            console.log("\nThe content is:")
-            console.log(data)
-            this.showMenu()
-        });
+    private async readFile() {
+        const fileName = await this.rl.question(this.getFileNameText())
+        const data = await this.readFileHandler.handle(this.FILES_FOLDER, fileName)
+        console.log("\nThe content is:")
+        console.log(data)
+        this.showMenu()
     }
 
-    public async summarizedCallTranscript() {
-        this.rl.question("filename (without extension): ",  async (response: string) => {
-            this.rl.question(`desired language (${this.languageService.getValidLanguages()
-                .map(x => x.toString()).join('-')}): `,  async (language: string) => {
-                    try {
-                        const summarizedData = await this.summarizeCallTranscriptHandler.handle(this.FILES_FOLDER, response, language)
-                        console.log("\nThe summary of the call is: ")
-                        console.log(summarizedData)
-                    } catch (error) {
-                        console.log("\nInvalid language, please try again")
-                    }
-                    this.showMenu()
-            });
-        });
+    private async summarizedCallTranscript() {
+        const fileName = await this.rl.question(this.getFileNameText())
+        const language = await this.rl.question(this.getLanguageText())
+
+        try {
+            const summarizedData = await this.summarizeCallTranscriptHandler.handle(this.FILES_FOLDER, fileName, language)
+            console.log("\nThe summary of the call is: ")
+            console.log(summarizedData)
+        } catch (error) {
+            console.log("\nInvalid language, please try again")
+        }
+        this.showMenu()
     }
 
-    public async askQuestions() {
-        this.rl.question("filename (without extension): ",  async (response: string) => {
-            this.rl.question("question: ",  async (question: string) => {
-                this.rl.question(`desired language (${this.languageService.getValidLanguages()
-                    .map(x => x.toString()).join('-')}): `,  async (language: string) => {
-                        try {
-                            const answer = await this.answerQuestionHandler.handle(this.FILES_FOLDER, response, question, language)
-                            console.log("\nThe answer is: ")
-                            console.log(answer)
-                        } catch (error) {
-                            console.log("\nInvalid language, please try again")
-                        }
+    private async askQuestions() {
+        const fileName = await this.rl.question(this.getFileNameText())
+        const language = await this.rl.question(this.getLanguageText())
+        const question = await this.rl.question(this.getQuestionText())
 
-                        this.showMenu()
-                });
-            });
-        });
+        try {
+            const answer = await this.answerQuestionHandler.handle(this.FILES_FOLDER, fileName, question, language)
+            console.log("\nThe answer is: ")
+            console.log(answer)
+        } catch (error) {
+            console.log("\nInvalid language, please try again")
+        }
+
+        this.showMenu()
     }
 
-    showHistory() {
-        this.rl.question("filename (without extension): ",  async (nameFile: string) => {
-            const history = await this.showHistoryHandler.handle(nameFile)
+    private async showHistory() {
+        const fileName = await this.rl.question(this.getFileNameText())
+        const history = await this.showHistoryHandler.handle(fileName)
 
-            console.log(`\nThe history for file ${nameFile} is the follow:`)
-            if (!history || history.length == 0) 
-                console.log("Don't have any saved question for file " + nameFile)
-            
-            history.forEach(x => {
-                console.log("-----")
-                console.log("user: " + x.question)
-                console.log("app: " + x.answer)
-            })
-
-            this.showMenu()
+        console.log(`\nThe history for file ${fileName} is the follow:`)
+        if (!history || history.length == 0) 
+            console.log("Don't have any saved question for file " + fileName)
+        
+        history.forEach(x => {
+            console.log("-----")
+            console.log("user: " + x.question)
+            console.log("app: " + x.answer)
         })
+
+        this.showMenu()
     }
+
+    private getOptionSelectedText = () =>  "option: "
+    private getFileNameText = () =>  "filename (without extension): "
+    private getQuestionText = () =>  "question: "
+    private getLanguageText = () =>  `desired language (${
+        this.languageService.getValidLanguages().map(x => x.toString()).join('-')
+    }): `
 
 }
