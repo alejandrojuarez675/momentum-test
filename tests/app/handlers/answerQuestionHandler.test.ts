@@ -2,11 +2,12 @@ import { expect, jest, test } from '@jest/globals';
 import { FilenameCannotBeEmptyError } from '../../../src/app/errors/filenameCannotBeEmpty';
 import { AnswerQuestionsHandler } from '../../../src/app/handlers/answerQuestionHandler';
 import { LanguageService } from '../../../src/app/services/languageService';
-import { AIServiceMock } from '../../mocks/AiServiceMock';
-import { DbServiceMock } from '../../mocks/DbServiceMock';
-import { FileServiceMock } from '../../mocks/FilerServiceMock';
-import { DIR_FILE, FILE_NAME, MOCKED_QUESTION, MOCKED_VALID_LANGUAGE } from '../../mocks/constants';
+import { AIServiceMock } from '../../mocks/services/AiServiceMock';
+import { DbServiceMock } from '../../mocks/services/DbServiceMock';
+import { FileServiceMock } from '../../mocks/services/FilerServiceMock';
+import { DIR_FILE, FILE_NAME, MOCKED_QUESTION, MOCKED_VALID_LANGUAGE, NOT_ALLOWED_LANGUAGE } from '../../mocks/constants';
 import { QuestionCannotBeEmptyError } from '../../../src/app/errors/questionCannotBeEmpty';
+import { InvalidLanguageError } from '../../../src/app/errors/invalidLanguageError';
 
 describe('AnswerQuestionsHandler', () => {
 
@@ -41,13 +42,13 @@ describe('AnswerQuestionsHandler', () => {
                 .toThrow(QuestionCannotBeEmptyError)
         })
 
-        // TODO fix
-        // test('have to validate that only allow valid languages', async () => {
-        //     await expect(async () => 
-        //             await generateCallTranscriptHandler.handle(DIR_FILE, FILE_NAME, NOT_ALLOWED_LANGUAGE))
-        //         .rejects
-        //         .toThrow(InvalidLanguageError)
-        // })
+        test('have to validate that only allow valid languages', async () => {
+            await expect(async () => 
+                    await answerQuestionsHandler.handle(DIR_FILE, FILE_NAME, MOCKED_QUESTION, NOT_ALLOWED_LANGUAGE)
+                )
+                .rejects
+                .toThrow(InvalidLanguageError)
+        })
 
         test('have to save the answer on the DB', async () => {
             const spySaveFile = jest.spyOn(mockedDbService, 'saveQuestionAndAnswerForFileName');

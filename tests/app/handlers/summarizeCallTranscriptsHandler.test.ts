@@ -1,11 +1,12 @@
 import { expect, jest, test } from '@jest/globals';
-import { AIServiceMock } from '../../mocks/AiServiceMock';
-import { FileServiceMock } from '../../mocks/FilerServiceMock';
+import { AIServiceMock } from '../../mocks/services/AiServiceMock';
+import { FileServiceMock } from '../../mocks/services/FilerServiceMock';
 import { LanguageService } from '../../../src/app/services/languageService';
 import { SummarizeCallTranscriptsHandler } from '../../../src/app/handlers/summarizeCallTranscriptHandler';
-import { DIR_FILE, FILE_NAME, FILE_NAME_WITH_EXTENSION } from '../../mocks/constants';
+import { DIR_FILE, FILE_NAME, FILE_NAME_WITH_EXTENSION, NOT_ALLOWED_LANGUAGE } from '../../mocks/constants';
 import { ValidLanguage } from '../../../src/domain/validLanguageSupport';
 import { FilenameCannotBeEmptyError } from '../../../src/app/errors/filenameCannotBeEmpty';
+import { InvalidLanguageError } from '../../../src/app/errors/invalidLanguageError';
 
 describe('SummarizeCallTranscriptsHandler', () => {
 
@@ -45,9 +46,12 @@ describe('SummarizeCallTranscriptsHandler', () => {
 
             expect(spySaveFile).toHaveBeenCalled()
         })
-
-        // TODO fix
-        // test('have to validate that only allow valid languages', async () => {
-        // })
+        
+        test('have to validate that only allow valid languages', async () => {
+            await expect(async () => 
+                    await summarizeCallTranscriptsHandler.handle(DIR_FILE, FILE_NAME, NOT_ALLOWED_LANGUAGE))
+                .rejects
+                .toThrow(InvalidLanguageError)
+        })
     })
 })

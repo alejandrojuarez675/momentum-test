@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
-import { IAiService } from "../../src/app/services/interfaces/IAiService";
-import { ValidLanguage } from "../../src/domain/validLanguageSupport";
-import { MOCKED_ANSWER, MOCKED_QUESTION, MOCKED_VALID_LANGUAGE } from "./constants";
+import { IAiService } from "../../../src/app/services/interfaces/IAiService";
+import { ValidLanguage } from "../../../src/domain/validLanguageSupport";
+import { MOCKED_ANSWER, MOCKED_QUESTION, MOCKED_VALID_LANGUAGE } from "../constants";
 
 export class AIServiceMock implements IAiService {
 
@@ -36,8 +36,4 @@ export class AIServiceMock implements IAiService {
         }
     }
     
-    translate(data: String, from: ValidLanguage, to: ValidLanguage): Promise<String> {
-        throw new Error("Method not implemented.");
-    }
-
 }

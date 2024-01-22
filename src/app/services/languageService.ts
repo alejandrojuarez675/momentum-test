@@ -1,7 +1,8 @@
 import { ValidLanguage } from "../../domain/validLanguageSupport";
 import { InvalidLanguageError } from "../errors/invalidLanguageError";
+import { ILanguageService } from "./interfaces/ILanguageService";
 
-export class LanguageService {
+export class LanguageService implements ILanguageService {
 
     public getValidLanguages(): ValidLanguage[] {
         return Object.values(ValidLanguage)

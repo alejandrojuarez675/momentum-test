@@ -1,5 +1,5 @@
 import { expect, jest, test } from '@jest/globals';
-import { FileServiceMock } from '../../mocks/FilerServiceMock';
+import { FileServiceMock } from '../../mocks/services/FilerServiceMock';
 import { ReadFileHandler } from '../../../src/app/handlers/readFileHandler';
 import { DIR_FILE, FILE_NAME, FILE_NAME_WITH_EXTENSION } from '../../mocks/constants';
 

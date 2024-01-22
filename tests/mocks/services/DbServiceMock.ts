@@ -1,6 +1,6 @@
-import { IDbService } from "../../src/app/services/interfaces/IDbService";
-import { QuestionAndAnswer } from "../../src/domain/questionAnswerDomain";
-import { FILE_NAME, MOCKED_ANSWER, MOCKED_QUESTION, MOCKED_QUESTION_AND_ANSWER } from "./constants";
+import { IDbService } from "../../../src/app/services/interfaces/IDbService";
+import { QuestionAndAnswer } from "../../../src/domain/questionAnswerDomain";
+import { FILE_NAME, MOCKED_ANSWER, MOCKED_QUESTION, MOCKED_QUESTION_AND_ANSWER } from "../constants";
 
 export class DbServiceMock implements IDbService {
 

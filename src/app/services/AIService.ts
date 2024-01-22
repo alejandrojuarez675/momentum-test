@@ -20,7 +20,4 @@ export class AIService implements IAiService {
         return await this.clientAI.summarizedData(data, language)
     }
 
-    public async translate(data: String, from: ValidLanguage, to: ValidLanguage): Promise<String> {
-        return await this.clientAI.translate(data, from, to)
-    }
 }

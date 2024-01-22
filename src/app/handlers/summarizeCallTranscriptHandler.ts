@@ -1,14 +1,14 @@
 import { FilenameCannotBeEmptyError } from "../errors/filenameCannotBeEmpty"
 import { IAiService } from "../services/interfaces/IAiService"
 import { IFileService } from "../services/interfaces/IFileService"
-import { LanguageService } from "../services/languageService"
+import { ILanguageService } from "../services/interfaces/ILanguageService"
 
 export class SummarizeCallTranscriptsHandler {
 
     constructor(
         private aiService: IAiService,
         private fileService: IFileService,
-        private languageService: LanguageService,
+        private languageService: ILanguageService,
     ) {}
 
     /**

@@ -3,7 +3,7 @@ import { QuestionCannotBeEmptyError } from "../errors/questionCannotBeEmpty"
 import { IAiService } from "../services/interfaces/IAiService"
 import { IDbService } from "../services/interfaces/IDbService"
 import { IFileService } from "../services/interfaces/IFileService"
-import { LanguageService } from "../services/languageService"
+import { ILanguageService } from "../services/interfaces/ILanguageService"
 
 export class AnswerQuestionsHandler {
 
@@ -11,7 +11,7 @@ export class AnswerQuestionsHandler {
         private aiService: IAiService,
         private fileService: IFileService,
         private dbService: IDbService,
-        private languageService: LanguageService,
+        private languageService: ILanguageService,
     ){}
 
     /**

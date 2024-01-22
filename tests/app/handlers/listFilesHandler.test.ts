@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
 import { ListFilesHandler } from '../../../src/app/handlers/listFilesHandler';
-import { FileServiceMock } from '../../mocks/FilerServiceMock';
+import { FileServiceMock } from '../../mocks/services/FilerServiceMock';
 import { DIR_FILE } from '../../mocks/constants';
 
 describe('ListFilesHandler', () => {

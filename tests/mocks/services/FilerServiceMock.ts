@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
-import { IFileService } from "../../src/app/services/interfaces/IFileService";
-import { DIR_FILE, FILE_NAME_WITH_EXTENSION } from './constants';
+import { IFileService } from "../../../src/app/services/interfaces/IFileService";
+import { DIR_FILE, FILE_NAME_WITH_EXTENSION } from '../constants';
 
 export class FileServiceMock implements IFileService {
 
