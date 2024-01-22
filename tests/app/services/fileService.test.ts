@@ -7,7 +7,7 @@ jest.mock('fs', () => ({
 }))
 
 import { FileService } from "../../../src/app/services/fileService"
-import { DIR_FILE, FILE_NAME } from "../../mocks/constants"
+import { MOCKED_DIR_FILE, MOCKED_FILE_NAME } from "../../mocks/constants"
 
 describe('FileService', () => {
 
@@ -16,7 +16,7 @@ describe('FileService', () => {
     describe('listFilesFromThatFolder', () => {
         test('have to return a list with the files of this folder', async () => {
             expect(
-                await fileService.listFilesFromThatFolder(DIR_FILE)
+                await fileService.listFilesFromThatFolder(MOCKED_DIR_FILE)
             ).toEqual(
                 ['file1', 'file2']
             )
@@ -26,7 +26,7 @@ describe('FileService', () => {
     describe('getContentFromFile', () => {
         test('have to return the content os this files', async () => {
             expect(
-                await fileService.getContentFromFile({dir: DIR_FILE, name: FILE_NAME})
+                await fileService.getContentFromFile({dir: MOCKED_DIR_FILE, name: MOCKED_FILE_NAME})
             ).toEqual(
                 'content'
             )

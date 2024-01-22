@@ -1,11 +1,11 @@
 import { IDbClient } from "../../../src/app/ports/IDbClient";
 import { QuestionAndAnswer } from "../../../src/domain/questionAnswerDomain";
-import { FILE_NAME, MOCKED_ANSWER, MOCKED_QUESTION, MOCKED_QUESTION_AND_ANSWER } from "../constants";
+import { MOCKED_FILE_NAME, MOCKED_ANSWER, MOCKED_QUESTION, MOCKED_QUESTION_AND_ANSWER } from "../constants";
 
 export class DbClientMock implements IDbClient {
     getHistoryByFileName(fileName: String): Promise<QuestionAndAnswer[]> {
         if (
-            fileName == FILE_NAME
+            fileName == MOCKED_FILE_NAME
         ) {
             return Promise.resolve([MOCKED_QUESTION_AND_ANSWER])
         } else {
@@ -17,7 +17,7 @@ export class DbClientMock implements IDbClient {
         if (
             questionAndAnswer.question == MOCKED_QUESTION &&
             questionAndAnswer.answer == MOCKED_ANSWER &&
-            fileName == FILE_NAME
+            fileName == MOCKED_FILE_NAME
           ) {
             return Promise.resolve();
           } else {

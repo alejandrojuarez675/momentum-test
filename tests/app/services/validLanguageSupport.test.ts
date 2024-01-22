@@ -3,7 +3,7 @@ import { describe } from 'node:test';
 import { InvalidLanguageError } from '../../../src/app/errors/invalidLanguageError';
 import { LanguageService } from '../../../src/app/services/languageService';
 import { ValidLanguage } from '../../../src/domain/validLanguageSupport';
-import { NOT_ALLOWED_LANGUAGE } from '../../mocks/constants';
+import { MOCKED_NOT_ALLOWED_LANGUAGE } from '../../mocks/constants';
 
 describe('LanguageService', () => {
     const languageService = new LanguageService()
@@ -19,7 +19,7 @@ describe('LanguageService', () => {
         })
     
         test('have to validate languages on allowed list', () => {
-            expect(() => languageService.validateLanguage(NOT_ALLOWED_LANGUAGE)).toThrow(InvalidLanguageError)
+            expect(() => languageService.validateLanguage(MOCKED_NOT_ALLOWED_LANGUAGE)).toThrow(InvalidLanguageError)
         })
     
     })

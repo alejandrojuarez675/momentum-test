@@ -1,7 +1,7 @@
 import { expect, jest, test } from '@jest/globals';
 import { FileServiceMock } from '../../mocks/services/FilerServiceMock';
 import { ReadFileHandler } from '../../../src/app/handlers/readFileHandler';
-import { DIR_FILE, FILE_NAME, FILE_NAME_WITH_EXTENSION } from '../../mocks/constants';
+import { MOCKED_DIR_FILE, MOCKED_FILE_NAME, MOCKED_FILE_NAME_WITH_EXTENSION } from '../../mocks/constants';
 
 describe('ReadFileHandler', () => {
 
@@ -11,9 +11,9 @@ describe('ReadFileHandler', () => {
     describe('handle', () => {
 
         test('have to return the content of specified file', async () => {
-            expect(await readFileHandler.handle(DIR_FILE, FILE_NAME))
+            expect(await readFileHandler.handle(MOCKED_DIR_FILE, MOCKED_FILE_NAME))
                 .toBe(await mockedFileService.getContentFromFile({
-                    dir: DIR_FILE, name: FILE_NAME_WITH_EXTENSION
+                    dir: MOCKED_DIR_FILE, name: MOCKED_FILE_NAME_WITH_EXTENSION
                 }))
         })
 
