@@ -11,9 +11,10 @@ export class AnswerQuestionsHandler {
         private dbService: DbService,
         private languageService: LanguageService,
     ){}
-    
+
     /**
     * @throws {InvalidLanguageError}
+    * @throws {FileNotFoundError}
     */
     public async handle(dir: String, nameFile: String, question: String, language: String): Promise<String> {
         const validLanguage = this.languageService.validateLanguage(language)

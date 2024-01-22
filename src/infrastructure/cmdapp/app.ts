@@ -11,6 +11,8 @@ import { MongoDbClient } from "../adapters/db/mongoClient";
 import { OpenAIClient } from "../adapters/clients/openAIClient";
 import { LanguageService } from "../../app/services/languageService";
 import * as readline from 'node:readline/promises';
+import { InvalidLanguageError } from "../../app/errors/invalidLanguageError";
+import { FileNotFoundError } from "../../app/errors/fileNotFoundError";
 
 export class CmdApp {
 
@@ -101,7 +103,7 @@ export class CmdApp {
             console.log("\nThe generated call is:")
             console.log(generatedCall)                        
         } catch (error) {
-            console.log("\nInvalid language, please try again")
+            this.handleErrors(error)        
         }
 
         this.showMenu()
@@ -117,9 +119,14 @@ export class CmdApp {
 
     private async readFile() {
         const fileName = await this.rl.question(this.getFileNameText())
-        const data = await this.readFileHandler.handle(this.FILES_FOLDER, fileName)
-        console.log("\nThe content is:")
-        console.log(data)
+
+        try {
+            const data = await this.readFileHandler.handle(this.FILES_FOLDER, fileName)
+            console.log("\nThe content is:")
+            console.log(data)                
+        } catch (error) {
+            this.handleErrors(error)        
+        }
         this.showMenu()
     }
 
@@ -132,7 +139,7 @@ export class CmdApp {
             console.log("\nThe summary of the call is: ")
             console.log(summarizedData)
         } catch (error) {
-            console.log("\nInvalid language, please try again")
+            this.handleErrors(error)        
         }
         this.showMenu()
     }
@@ -147,7 +154,7 @@ export class CmdApp {
             console.log("\nThe answer is: ")
             console.log(answer)
         } catch (error) {
-            console.log("\nInvalid language, please try again")
+            this.handleErrors(error)        
         }
 
         this.showMenu()
@@ -176,5 +183,11 @@ export class CmdApp {
     private getLanguageText = () =>  `desired language (${
         this.languageService.getValidLanguages().map(x => x.toString()).join('-')
     }): `
+
+    private handleErrors(error: any): void {
+        if (error instanceof InvalidLanguageError) console.log("\nInvalid language, please try again")
+        else if (error instanceof FileNotFoundError) console.log("\nInvalid filename, please try again")
+        else console.log("\nHave a error in your option, please select again")
+    }
 
 }

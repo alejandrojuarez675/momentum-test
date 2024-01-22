@@ -16,6 +16,9 @@ export class SummarizeCallTranscriptsHandler {
     public async handle(dir: String, nameFile: String, language: String): Promise<String> {
         const validLanguage = this.languageService.validateLanguage(language)
         
+        /**
+        * @throws {FileNotFoundError}
+        */
         const data = await this.fileService.getContentFromFile({
             dir,
             name: `${nameFile}.txt`

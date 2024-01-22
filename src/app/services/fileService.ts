@@ -1,4 +1,5 @@
 import { promises as fs } from 'fs';
+import { FileNotFoundError } from '../errors/fileNotFoundError';
 
 export class FileService {
 
@@ -8,8 +9,15 @@ export class FileService {
     return result;
   }
 
+  /**
+   * @throws {FileNotFoundError}
+   */
   public async getContentFromFile(data: { dir: String; name: String }): Promise<String> {
-    return await fs.readFile(data.dir.concat(data.name.toString()), { encoding: 'utf8' })
+    try {
+      return await fs.readFile(data.dir.concat(data.name.toString()), { encoding: 'utf8' })
+    } catch (error) {
+      throw new FileNotFoundError()
+    }
   }
 
   public async saveFile(data: { dir: String; name: String; data: String }) {
