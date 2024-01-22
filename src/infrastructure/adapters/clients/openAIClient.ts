@@ -58,11 +58,16 @@ export class OpenAIClient implements IClientAI {
       messages: [
         {
           role: "system",
-          content: `You are a database of sales calls. I want to have an example of a call.
-          I need that you invent names for tu prospect and the sales representative.
-          I need that you provide me the information on next format in ${language}:
-          {hour} {user} ({company website "mycompany.com"}): {msg}`,
+          content: `You are a centralized multi-language database of sales calls.
+          Only calls with more than 4 message were saved. 
+          You have the real names and website of the prospects and the sales representative.
+          You have saved the information on next format for every line:
+          {{hour on format '00:00:00'}} {{user}} ({{website without 'www.'}}): {{message}}`,
         },
+        {
+          role: "user",
+          content: `I want to have an example of a call in ${language}. Only the call.`
+        }
       ],
       model: this.MODEL,
     });
