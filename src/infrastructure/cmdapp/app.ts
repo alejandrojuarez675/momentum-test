@@ -13,6 +13,7 @@ import { LanguageService } from "../../app/services/languageService";
 import * as readline from 'node:readline/promises';
 import { InvalidLanguageError } from "../../app/errors/invalidLanguageError";
 import { FileNotFoundError } from "../../app/errors/fileNotFoundError";
+import { FilenameCannotBeEmptyError } from "../../app/errors/filenameCannotBeEmpty";
 
 export class CmdApp {
 
@@ -203,6 +204,7 @@ export class CmdApp {
     private handleErrors(error: any): void {
         if (error instanceof InvalidLanguageError) console.log("\nInvalid language, please try again")
         else if (error instanceof FileNotFoundError) console.log("\nInvalid filename, please try again")
+        else if (error instanceof FilenameCannotBeEmptyError) console.log("\nInvalid filename, please try again")
         else console.log("\nHave a error in your option, please select again")
     }
 

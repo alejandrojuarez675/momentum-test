@@ -1,7 +1,8 @@
 import { ValidLanguage } from "../../domain/validLanguageSupport";
 import { IClientAI } from "../ports/IClientAI";
+import { IAiService } from "./interfaces/IAiService";
 
-export class AIService {
+export class AIService implements IAiService {
 
     constructor(
         private clientAI: IClientAI

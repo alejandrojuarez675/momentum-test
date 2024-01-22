@@ -1,5 +1,5 @@
 export enum ValidLanguage {
-    English = "english", 
-    Spanish = "spanish",
-    French = "french"
+    english = "english", 
+    spanish = "spanish",
+    french = "french"
 }
