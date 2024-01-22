@@ -17,6 +17,7 @@ export class AnswerQuestionsHandler {
     /**
     * @throws {InvalidLanguageError}
     * @throws {FileNotFoundError}
+    * @throws {QuestionCannotBeEmptyError}
     */
     public async handle(dir: String, nameFile: String, question: String, language: String): Promise<String> {
         if (!nameFile) { throw new FilenameCannotBeEmptyError() }
